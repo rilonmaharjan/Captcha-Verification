@@ -26,10 +26,9 @@ class _RegisterState extends State<Register> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
 
-
 //reges pw validator
   RegExp regex =
-        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+      RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
 
   final formKey = GlobalKey<FormState>();
   @override
@@ -147,6 +146,11 @@ class _RegisterState extends State<Register> {
                                       color:
                                           Color.fromARGB(255, 167, 166, 166)),
                                 ),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                validator: (value) => (value != null && value.isEmpty)
+                                    ? 'Field should not be empty'
+                                    : null,
                               ),
                             ),
                             const SizedBox(
@@ -227,8 +231,9 @@ class _RegisterState extends State<Register> {
                               ),
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              validator: (value) => (value != null && !regex.hasMatch(value))
-                                  ? '1 uppercase, 1 numeric and 1 special character'
+                              validator: (value) => (value != null &&
+                                      !regex.hasMatch(value))
+                                  ? '1 uppercase, 1 numeric and 1 special character\nand must have 8 characters'
                                   : null,
                             ),
                             const SizedBox(

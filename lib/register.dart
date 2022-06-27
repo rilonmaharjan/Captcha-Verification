@@ -1,5 +1,6 @@
 import 'package:captcha/khana.dart';
 import 'package:captcha/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -148,9 +149,10 @@ class _RegisterState extends State<Register> {
                                 ),
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
-                                validator: (value) => (value != null && value.isEmpty)
-                                    ? 'Field should not be empty'
-                                    : null,
+                                validator: (value) =>
+                                    (value != null && value.isEmpty)
+                                        ? 'Field should not be empty'
+                                        : null,
                               ),
                             ),
                             const SizedBox(
@@ -394,6 +396,16 @@ class _RegisterState extends State<Register> {
         email: emailController.text.trim().toLowerCase(),
         password: passwordController.text.trim(),
       );
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(emailController.text.trim().toLowerCase())
+          .set({
+        'email': emailController.text.trim().toLowerCase(),
+        'password': passwordController.text.trim(),
+        'name': nameController.text.trim(),
+        'phoneNumber': phoneController.text.trim(),
+      });
 
       Utils.showSnackBar('Registered successfully', true);
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
